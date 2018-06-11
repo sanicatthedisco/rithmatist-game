@@ -5,17 +5,16 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 
 public class Main extends BasicGame {
 	
 	public static final int WIDTH = 1920, HEIGHT = 1080;
-	int x = 0;
-	int y = 0;
+	float x = 0;
+	float y = 0;
+	float speed = .5f;
 	
 	public Main(String gamename) {
 		super(gamename);
@@ -23,24 +22,36 @@ public class Main extends BasicGame {
 	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
-		// TODO Auto-generated method stub
+		GameObject.initGameObjects();
 		
 	}
 	
 	@Override
 	public void update(GameContainer gc, int dt) throws SlickException {
-		x ++;
-		y ++;
+		/* Test code
+		x += dt * speed;
+		y += dt * speed;
+		*/
+		
+		for (GameObject o : GameObject.allObjects) {
+			o.update(gc, dt);
+		}
 	}
 
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
+		/* Test code
 		g.setColor(Color.white);
 		g.drawRect(x, y, 100, 100);
+		*/
+		for (GameObject o : GameObject.allObjects) {
+			o.render(gc, g);
+		}
 	}
 	
 	public static void main(String[] args) {
 		try {
+			// Setting up game container
 			AppGameContainer appgc;
 			appgc = new AppGameContainer(new Main("Test"));
 			appgc.setDisplayMode(WIDTH, HEIGHT, false);
