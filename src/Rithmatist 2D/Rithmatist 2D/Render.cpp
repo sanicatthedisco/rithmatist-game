@@ -9,7 +9,7 @@ Render::Render()
 	//window.setTitle("RPG");
 }
 
-void Render::renderCycle(double factor, std::vector<GameActor> &activeActors_)
+void Render::renderCycle(double factor, std::vector<GameActor*> &activeActors_)
 {
 	//for (GameActors){} cycle array of active gameactors
 
@@ -30,7 +30,7 @@ void Render::renderCycle(double factor, std::vector<GameActor> &activeActors_)
 	//window.draw(activeActors[0].actorSprite);
 	for (int i = 0; i <  activeActors_.size(); i++)
 	{
-		activeActors_[i].draw(window);
+		activeActors_[i]->draw(window);
 	}
 
 	window.display();

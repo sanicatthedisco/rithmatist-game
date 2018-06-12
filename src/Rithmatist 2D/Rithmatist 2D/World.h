@@ -16,5 +16,5 @@ private:
 	bool gameCycling = true;
 	double previous = gameClock.getElapsedTime().asMilliseconds();
 	double lag = 0.0;
-	double MS_PER_UPDATE = 10.0;
+	double MS_PER_UPDATE = 16.0;
 };

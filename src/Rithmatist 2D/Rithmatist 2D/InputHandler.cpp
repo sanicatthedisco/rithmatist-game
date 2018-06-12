@@ -2,7 +2,9 @@
 
 InputHandler::InputHandler()
 {
-
+	drawState = 'n';
+	//f=freeform, c=circle, l=straight line, e=erase, n=none
+	firstSet = true;
 }
 
 InputHandler::~InputHandler()
@@ -38,16 +40,22 @@ void InputHandler::input(Render& rendering)
 		}
 		rendering.window.setView(gameView);
 		} */
+		else
+		{
+			handleInput(event);
+		}
 	}
 }
 
-void InputHandler::handleInput(sf::Event &event, char &drawState)
+void InputHandler::handleInput(sf::Event &event)
 {
+	bool lastDrawState = drawState;
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
 		if (event.key.code == sf::Mouse::Left)
 		{
 			//Draw start
+			drawState = 'f';
 		}
 		else if (event.type == sf::Mouse::Right)
 		{
@@ -59,6 +67,7 @@ void InputHandler::handleInput(sf::Event &event, char &drawState)
 		if (event.key.code == sf::Mouse::Left)
 		{
 			//Draw end
+			drawState = 'n';
 		}
 		else if (event.type == sf::Mouse::Right)
 		{
@@ -70,6 +79,44 @@ void InputHandler::handleInput(sf::Event &event, char &drawState)
 		if (event.key.code == sf::Keyboard::LShift)
 		{
 			//Straight line mode
+		}
+	}
+	if (lastDrawState == drawState)
+	{
+		newState = false;
+	}
+	else
+	{
+		newState = true;
+	}
+}
+
+void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, sf::RenderWindow *window)
+{
+	if (drawState == 'f')
+	{
+		if (newState)
+		{
+			currentStroke = new Stroke;
+		}
+		sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+		if (firstSet)
+		{
+			quad[0] = sf::Vector2f(mousePos.x - 1.0f, mousePos.y + 1.0f);
+			quad[1] = sf::Vector2f(mousePos.x - 1.0f, mousePos.y - 1.0f);
+			firstSet = false;
+		}
+		else
+		{
+			quad[2] = sf::Vector2f(mousePos.x + 1.0f, mousePos.y - 1.0f);
+			quad[3] = sf::Vector2f(mousePos.x + 1.0f, mousePos.y + 1.0f);
+			for (int i = 0; i < 4; i++)
+			{
+				currentStroke->parts.append(quad[i]);
+			}
+			activeActors_.push_back(currentStroke);
+			//GameActor *current = activeActors_[activeActors_.size() - 1];
+			firstSet = true;
 		}
 	}
 }

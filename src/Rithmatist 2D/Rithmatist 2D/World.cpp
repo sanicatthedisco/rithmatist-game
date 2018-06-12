@@ -11,11 +11,10 @@ void World::gameLoop()
 	Render rendering;
 	InputHandler handler;
 
-	char drawState = 'f';
-	//f=freeform, c=circle, l=straight line, e=erase
-
-	std::vector<GameActor> activeActors_;
+	std::vector<GameActor*> activeActors_;
 	//activeActors_[0] = &thePlayer;
+
+	sf::RenderWindow *window = &rendering.window;
 
 	double previous = gameClock.getElapsedTime().asMilliseconds();
 	double lag = 0.0;
@@ -26,14 +25,16 @@ void World::gameLoop()
 		previous = current;
 		lag += elapsed;
 
-		handler.input(rendering);
+		handler.input(rendering); 
 
+		//Fixed Time Loop
 		while (lag >= MS_PER_UPDATE)
 		{
 			//update();
 			lag -= MS_PER_UPDATE;
 		}
 
+		handler.handleDraw(activeActors_, window);
 		rendering.renderCycle(lag / MS_PER_UPDATE, activeActors_);
 	}
 }

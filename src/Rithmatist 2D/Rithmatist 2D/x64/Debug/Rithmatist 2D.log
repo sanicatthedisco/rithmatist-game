@@ -1,1 +1,5 @@
-﻿  Rithmatist 2D.vcxproj -> C:\Users\jeffr\Documents\GitHub\rithmatist-game\src\Rithmatist 2D\x64\Debug\Rithmatist 2D.exe
+﻿  InputHandler.cpp
+c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\inputhandler.cpp(84): warning C4805: '==': unsafe mix of type 'bool' and type 'char' in operation
+  Render.cpp
+  Generating Code...
+  Rithmatist 2D.vcxproj -> C:\Users\jeffr\Documents\GitHub\rithmatist-game\src\Rithmatist 2D\x64\Debug\Rithmatist 2D.exe
