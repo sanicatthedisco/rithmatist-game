@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "GameActor.h"
 #include "Render.h"
 #include "Stroke.h"
@@ -15,8 +16,9 @@ public:
 
 private:
 	char drawState;
-	bool newState;
+	char lastState;
+	bool newDraw;
 	Stroke *currentStroke;
-	sf::Vertex quad[4];
-	bool firstSet;
+	sf::Vector2f lastMousePos;
+	bool drawPart1;
 };

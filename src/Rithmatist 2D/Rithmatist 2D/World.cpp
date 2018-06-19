@@ -31,10 +31,19 @@ void World::gameLoop()
 		while (lag >= MS_PER_UPDATE)
 		{
 			//update();
+			handler.handleDraw(activeActors_, window);
 			lag -= MS_PER_UPDATE;
 		}
 
-		handler.handleDraw(activeActors_, window);
 		rendering.renderCycle(lag / MS_PER_UPDATE, activeActors_);
 	}
+
+	/*for (int i = 0; i < activeActors_.size(); i++)
+	{
+		if (activeActors_[i])
+		{
+			delete activeActors_[i];
+		}
+	}*/
+	std::vector<GameActor*>().swap(activeActors_);
 }

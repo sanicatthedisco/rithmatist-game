@@ -2,7 +2,7 @@
 
 Stroke::Stroke()
 {
-	parts.setPrimitiveType(sf::Quads);
+	
 }
 
 
@@ -12,5 +12,5 @@ Stroke::~Stroke()
 
 void Stroke::draw(sf::RenderTarget& target)
 {
-	target.draw(parts);
+	target.draw(rect);
 }

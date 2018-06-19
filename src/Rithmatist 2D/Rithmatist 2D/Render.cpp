@@ -5,8 +5,8 @@
 Render::Render()
 {
 	window.create(sf::VideoMode(900, 900), "Rithmatist 2D", sf::Style::Close | sf::Style::Titlebar);
-	//window.setSize(sf::Vector2u(1120, 630));
-	//window.setTitle("RPG");
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 4;
 }
 
 void Render::renderCycle(double factor, std::vector<GameActor*> &activeActors_)
