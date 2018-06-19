@@ -93,37 +93,8 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, sf::Render
 	sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 	if (drawState == 'f')
 	{
-		if (newDraw)
-		{
-			lastMousePos = mousePos;
-			newDraw = false;
-			drawPart1 = false;
-		}
-		else
-		{
-			if (drawPart1)
-			{
-				drawPart1 = false;
-			}
-			else if (!drawPart1)
-			{
-				currentStroke = new Stroke;
-
-				sf::Vector2f triangle = lastMousePos - mousePos;
-
-				float length = std::sqrt(std::pow(triangle.x, 2.0f) + std::pow(triangle.y, 2.0f));
-				float theta = std::atan2(triangle.y, triangle.x);
-
-				currentStroke->rect.setSize(sf::Vector2f(length, 4.0f));
-				currentStroke->rect.setOrigin(0, 2);
-				currentStroke->rect.setPosition(lastMousePos);
-				currentStroke->rect.setRotation((theta*180.0f) / 3.1415f);
-
-				activeActors_.push_back(currentStroke);
-
-				drawPart1 = true;
-				lastMousePos = mousePos;
-			}
-		}
+		currentStroke = new Stroke;
+		currentStroke->circle.setPosition(mousePos);
+		activeActors_.push_back(currentStroke);
 	}
 }

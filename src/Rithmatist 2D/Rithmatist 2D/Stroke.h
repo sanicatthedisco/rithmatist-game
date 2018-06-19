@@ -8,6 +8,6 @@ public:
 	~Stroke();
 	void draw(sf::RenderTarget& target);
 
-	sf::RectangleShape rect;
+	sf::CircleShape circle;
 };
 
