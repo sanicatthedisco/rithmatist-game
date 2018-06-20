@@ -4,7 +4,7 @@
 
 Render::Render()
 {
-	window.create(sf::VideoMode(900, 900), "Rithmatist 2D", sf::Style::Close | sf::Style::Titlebar);
+	window.create(sf::VideoMode(1000, 1000), "Rithmatist 2D", sf::Style::Close | sf::Style::Titlebar);
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 4;
 }

@@ -7,7 +7,7 @@ class Stroke : public GameActor
 public:
 	Stroke();
 	~Stroke();
-	void draw(sf::RenderTarget& target);
+	virtual void draw(sf::RenderTarget& target);
 
 	std::vector<sf::CircleShape> circles;
 };

@@ -12,7 +12,9 @@ void World::gameLoop()
 	InputHandler handler;
 
 	std::vector<GameActor*> activeActors_;
-	//activeActors_[0] = &thePlayer;
+	
+	Panel *drawModePanel_ = new Panel("Textures/Frame.png", sf::Vector2f(64.0f, 64.0f), sf::Vector2f(0.0f, 0.0f));
+	activeActors_.push_back(drawModePanel_);
 
 	sf::RenderWindow *window = &rendering.window;
 
@@ -30,7 +32,7 @@ void World::gameLoop()
 		//Fixed Time Loop
 		while (lag >= MS_PER_UPDATE)
 		{
-			//update();
+			drawModePanel_->update(handler);
 			handler.handleDraw(activeActors_, window);
 			lag -= MS_PER_UPDATE;
 		}

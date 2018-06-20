@@ -23,6 +23,7 @@
     <ClInclude Include="GameActor.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Panel.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Stroke.h" />
     <ClInclude Include="Warding.h" />
@@ -33,6 +34,7 @@
     <ClCompile Include="GameActor.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Panel.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Stroke.cpp" />
     <ClCompile Include="Warding.cpp" />

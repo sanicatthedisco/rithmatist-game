@@ -5,6 +5,8 @@
 #include "Render.h"
 #include "Stroke.h"
 #include "Forbiddance.h"
+#include "Warding.h"
+//#include "Vigor.h"
 
 class InputHandler
 {
@@ -15,12 +17,13 @@ public:
 	void input(Render &rendering);
 	void handleDraw(std::vector<GameActor*> &activeActors_, sf::RenderWindow *window);
 
-private:
 	char drawState;
-	char lastState;
+
+private:
+	bool isDrawing;
 	bool newDraw;
 	bool endDraw;
-	size_t currentStrokeIndex;
-	Stroke *currentStroke;
+	size_t  currentStrokeIndex;
+	Stroke *currentStroke_;
 	sf::Vector2f lastMousePos;
 };

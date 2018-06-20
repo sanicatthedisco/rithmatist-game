@@ -1,7 +1,5 @@
-﻿  Forbiddance.cpp
-  GameActor.cpp
-  InputHandler.cpp
-  World.cpp
-  main.cpp
-  Generating Code...
+﻿  Warding.cpp
+c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(189): warning C4244: 'argument': conversion from 'float' to 'size_t', possible loss of data
+c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(124): warning C4101: 'Xi': unreferenced local variable
+c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(124): warning C4101: 'Yi': unreferenced local variable
   Rithmatist 2D.vcxproj -> C:\Users\jeffr\Documents\GitHub\rithmatist-game\src\Rithmatist 2D\x64\Debug\Rithmatist 2D.exe

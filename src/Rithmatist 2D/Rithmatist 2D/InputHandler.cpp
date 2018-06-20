@@ -3,8 +3,8 @@
 InputHandler::InputHandler()
 {
 	drawState = 'n';
-	lastState = 'n';
-	//f=freeform, c=circle, l=straight line, e=erase, n=none
+	//f=forbiddence, w=warding, v=vigor, e=erase, n=none
+	isDrawing = false;
 	newDraw = false;
 	endDraw = false;
 }
@@ -53,67 +53,104 @@ void InputHandler::handleInput(sf::Event &event)
 {
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
-		if (event.key.code == sf::Mouse::Left)
+		if (event.key.code == sf::Mouse::Left && drawState != 'n')
 		{
 			//Draw start
-			drawState = 'f';
 			newDraw = true;
+			isDrawing = true;
 			std::cout << "Start" << std::endl;
 		}
-		else if (event.type == sf::Mouse::Right)
+		else if (event.key.code == sf::Mouse::Right)
 		{
 			//Erase start
+			drawState = 'e';
+			isDrawing = true;
 		}
 	}
 	else if (event.type == sf::Event::MouseButtonReleased)
 	{
-		if (event.key.code == sf::Mouse::Left)
+		if (event.key.code == sf::Mouse::Left && drawState != 'n')
 		{
 			//Draw end
-			drawState = 'n';
 			endDraw = true;
+			isDrawing = false;
 			std::cout << "End" << std::endl;
 		}
 		else if (event.type == sf::Mouse::Right)
 		{
 			//Erase end
+			isDrawing = false;
 		}
 	}
 	else if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::LShift)
+		if (event.key.code == sf::Keyboard::W)
 		{
-			//Straight line mode
+			drawState = 'w';
+		}
+		if (event.key.code == sf::Keyboard::V)
+		{
+			drawState = 'v';
+		}
+		if (event.key.code == sf::Keyboard::F)
+		{
+			drawState = 'f';
 		}
 	}
 }
 
 void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, sf::RenderWindow *window)
 {
-	sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
-	if (drawState == 'f')
+	if (drawState == 'n')
 	{
-		if (newDraw)
-		{
-			currentStroke = new Stroke;
-			currentStrokeIndex = activeActors_.size();
-			activeActors_.push_back(currentStroke);
-			newDraw = false;
-		}
-		sf::CircleShape currentCircle;
-		currentCircle.setPosition(mousePos);
-		currentCircle.setRadius(2.0f);
-		currentStroke->circles.push_back(currentCircle);
+		return;
 	}
-	if (drawState == 'n' && endDraw)
+	if (isDrawing)
 	{
-		std::vector<sf::Vector2f> data;
-		for (int i = 0; i < currentStroke->circles.size(); i++)
-		{	
-			data.push_back(currentStroke->circles[i].getPosition());
+		if (drawState == 'e')
+		{
+
 		}
+		else
+		{
+			sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+			if (newDraw)
+			{
+				currentStroke_ = new Stroke;
+				currentStrokeIndex = activeActors_.size();
+				activeActors_.push_back(currentStroke_);
+				newDraw = false;
+			}
+			sf::CircleShape currentCircle;
+			currentCircle.setPosition(mousePos);
+			currentCircle.setRadius(2.0f);
+			currentStroke_->circles.push_back(currentCircle);
+		}
+	}
+	if (endDraw)
+	{
+		//Copy data points
+		std::vector<sf::Vector2f> data;
+		for (int i = 0; i < currentStroke_->circles.size(); i++)
+		{
+			data.push_back(currentStroke_->circles[i].getPosition());
+		}
+		//Clear stroke
 		delete activeActors_[currentStrokeIndex];
-		activeActors_[currentStrokeIndex] = new Forbiddance(data);
+
+		switch (drawState)
+		{
+		case 'f':
+			activeActors_[currentStrokeIndex] = new Forbiddance(data);
+			break;
+		case 'w':
+			activeActors_[currentStrokeIndex] = new Warding(data);
+			break;
+		case 'v':
+			//activeActors_[currentStrokeIndex] = new Vigor(data);
+			break;
+		}
+		
 		endDraw = false;
 	}
 }

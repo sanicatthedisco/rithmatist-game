@@ -16,7 +16,8 @@ Forbiddance::Forbiddance(std::vector<sf::Vector2f> data)
 	//findIntercept
 	findIntercept();
 	//find RMSD and convert to strength
-	//findRMSD();
+	findRMSD();
+	std::cout << "RMSD: " << RMSD << " Strength: " << strength << std::endl;
 	//Set up regressionLine VertexArray
 	regressionLine.append(sf::Vertex(sf::Vector2f(points[0].x, m*points[0].x + b)));
 	regressionLine.append(sf::Vertex(sf::Vector2f(points.back().x, m*points.back().x + b)));
@@ -66,5 +67,32 @@ void Forbiddance::findIntercept()
 void Forbiddance::findRMSD()
 {
 	//Calculate RMSD
-	
+	float sumY = 0.0f; //Sum of Predicted y values - input y values
+	for (int i = 0; i < points.size(); i++)
+	{
+		sumY += std::pow(m*x[i] + b - y[i], 2.0f);
+	}
+	RMSD = std::sqrt(sumY / points.size());
+
+	//Strength
+	if (RMSD > 20.0f)
+	{
+		//fail to draw
+		strength = 0.0f;
+	}
+	else if (RMSD < 1.0f)
+	{
+		//max strength
+		strength = 150.0f;
+	}
+	else if (RMSD >= 1.0f && RMSD <= 20.0f)
+	{
+		//Interpret (temp)
+		strength = 150.0f / std::sqrt(RMSD);
+	}
+	else // ie NaN
+	{
+		//fail to draw 
+		strength = 0.0f;
+	}
 }
