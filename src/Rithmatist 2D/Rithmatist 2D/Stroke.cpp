@@ -2,15 +2,19 @@
 
 Stroke::Stroke()
 {
-	circle.setRadius(2.0f);
+	
 }
 
 
 Stroke::~Stroke()
 {
+
 }
 
 void Stroke::draw(sf::RenderTarget& target)
 {
-	target.draw(circle);
+	for (int i = 0; i < circles.size(); i++)
+	{
+		target.draw(circles[i]);
+	}
 }

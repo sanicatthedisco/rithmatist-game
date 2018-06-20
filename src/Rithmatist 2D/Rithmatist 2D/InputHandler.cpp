@@ -6,7 +6,7 @@ InputHandler::InputHandler()
 	lastState = 'n';
 	//f=freeform, c=circle, l=straight line, e=erase, n=none
 	newDraw = false;
-	drawPart1 = true;
+	endDraw = false;
 }
 
 InputHandler::~InputHandler()
@@ -57,7 +57,6 @@ void InputHandler::handleInput(sf::Event &event)
 		{
 			//Draw start
 			drawState = 'f';
-			drawPart1 = true;
 			newDraw = true;
 			std::cout << "Start" << std::endl;
 		}
@@ -72,6 +71,7 @@ void InputHandler::handleInput(sf::Event &event)
 		{
 			//Draw end
 			drawState = 'n';
+			endDraw = true;
 			std::cout << "End" << std::endl;
 		}
 		else if (event.type == sf::Mouse::Right)
@@ -93,8 +93,27 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, sf::Render
 	sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 	if (drawState == 'f')
 	{
-		currentStroke = new Stroke;
-		currentStroke->circle.setPosition(mousePos);
-		activeActors_.push_back(currentStroke);
+		if (newDraw)
+		{
+			currentStroke = new Stroke;
+			currentStrokeIndex = activeActors_.size();
+			activeActors_.push_back(currentStroke);
+			newDraw = false;
+		}
+		sf::CircleShape currentCircle;
+		currentCircle.setPosition(mousePos);
+		currentCircle.setRadius(2.0f);
+		currentStroke->circles.push_back(currentCircle);
+	}
+	if (drawState == 'n' && endDraw)
+	{
+		std::vector<sf::Vector2f> data;
+		for (int i = 0; i < currentStroke->circles.size(); i++)
+		{	
+			data.push_back(currentStroke->circles[i].getPosition());
+		}
+		delete activeActors_[currentStrokeIndex];
+		activeActors_[currentStrokeIndex] = new Forbiddance(data);
+		endDraw = false;
 	}
 }

@@ -4,6 +4,7 @@
 #include "GameActor.h"
 #include "Render.h"
 #include "Stroke.h"
+#include "Forbiddance.h"
 
 class InputHandler
 {
@@ -18,7 +19,8 @@ private:
 	char drawState;
 	char lastState;
 	bool newDraw;
+	bool endDraw;
+	size_t currentStrokeIndex;
 	Stroke *currentStroke;
 	sf::Vector2f lastMousePos;
-	bool drawPart1;
 };

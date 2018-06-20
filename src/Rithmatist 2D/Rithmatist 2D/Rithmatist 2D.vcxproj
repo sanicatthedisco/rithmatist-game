@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Forbiddance.h" />
     <ClInclude Include="GameActor.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="main.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Forbiddance.cpp" />
     <ClCompile Include="GameActor.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />

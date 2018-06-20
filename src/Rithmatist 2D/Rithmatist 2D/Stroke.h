@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "GameActor.h"
+#include <vector>
 class Stroke : public GameActor
 {
 public:
@@ -8,6 +9,6 @@ public:
 	~Stroke();
 	void draw(sf::RenderTarget& target);
 
-	sf::CircleShape circle;
+	std::vector<sf::CircleShape> circles;
 };
 

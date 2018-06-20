@@ -8,7 +8,4 @@ void GameActor::draw(sf::RenderTarget& target)
 {
 }
 
-void draw(sf::RenderTarget& target)
-{
 
-}
