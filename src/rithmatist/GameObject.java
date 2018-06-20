@@ -11,6 +11,9 @@ public class GameObject {
 	
 	public static ArrayList<GameObject> allObjects, toAdd, toRemove;
 	public static float chalkwidth = 5;
+
+	public static ArrayList<Float> mouseXPositions = new ArrayList<Float>();
+	public static ArrayList<Float> mouseYPositions = new ArrayList<Float>();
 	
 	// Basic constructor
 	public GameObject(float x, float y) {
@@ -24,7 +27,9 @@ public class GameObject {
 		toAdd = new ArrayList<GameObject>();
 		toRemove = new ArrayList<GameObject>();
 		
-		allObjects.add(new WardLine(200, 200, 100));
+		WardLine.drawWardLine();
+		
+		//allObjects.add(new WardLine(200, 200, 100, 1));
 	}
 	
 	public void update(GameContainer gc, int dt) {};
