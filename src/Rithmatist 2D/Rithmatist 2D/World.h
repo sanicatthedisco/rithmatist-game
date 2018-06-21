@@ -19,4 +19,5 @@ private:
 	double previous = gameClock.getElapsedTime().asMilliseconds();
 	double lag = 0.0;
 	const double MS_PER_UPDATE = 16.0;
+	bool m_keepM;
 };

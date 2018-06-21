@@ -6,16 +6,16 @@
 #include "Stroke.h"
 #include "Forbiddance.h"
 #include "Warding.h"
-//#include "Vigor.h"
+#include "Vigor.h"
 
 class InputHandler
 {
 public:
 	InputHandler();
 	~InputHandler();
-	void handleInput(sf::Event &event);
-	void input(Render &rendering);
-	void handleDraw(std::vector<GameActor*> &activeActors_, sf::RenderWindow *window);
+	void handleInput(sf::Event &event, sf::RenderWindow *window);
+	void input(Render &rendering, sf::RenderWindow *window);
+	void handleDraw(std::vector<GameActor*> &activeActors_, std::vector<Vigor*> &activeVigors_, sf::RenderWindow *window);
 
 	char drawState;
 

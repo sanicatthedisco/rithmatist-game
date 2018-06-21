@@ -14,7 +14,7 @@ InputHandler::~InputHandler()
 
 }
 
-void InputHandler::input(Render& rendering)
+void InputHandler::input(Render& rendering, sf::RenderWindow *window)
 {
 	//List of events
 	sf::Event event;
@@ -44,45 +44,15 @@ void InputHandler::input(Render& rendering)
 		} */
 		else
 		{
-			handleInput(event);
+			handleInput(event, window);
 		}
 	}
 }
 
-void InputHandler::handleInput(sf::Event &event)
+void InputHandler::handleInput(sf::Event &event, sf::RenderWindow *window)
 {
-	if (event.type == sf::Event::MouseButtonPressed)
-	{
-		if (event.key.code == sf::Mouse::Left && drawState != 'n')
-		{
-			//Draw start
-			newDraw = true;
-			isDrawing = true;
-			std::cout << "Start" << std::endl;
-		}
-		else if (event.key.code == sf::Mouse::Right)
-		{
-			//Erase start
-			drawState = 'e';
-			isDrawing = true;
-		}
-	}
-	else if (event.type == sf::Event::MouseButtonReleased)
-	{
-		if (event.key.code == sf::Mouse::Left && drawState != 'n')
-		{
-			//Draw end
-			endDraw = true;
-			isDrawing = false;
-			std::cout << "End" << std::endl;
-		}
-		else if (event.type == sf::Mouse::Right)
-		{
-			//Erase end
-			isDrawing = false;
-		}
-	}
-	else if (event.type == sf::Event::KeyPressed)
+	sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+	if (event.type == sf::Event::KeyPressed)
 	{
 		if (event.key.code == sf::Keyboard::W)
 		{
@@ -97,35 +67,73 @@ void InputHandler::handleInput(sf::Event &event)
 			drawState = 'f';
 		}
 	}
+	else if (mousePos.y > 502.0f)
+	{
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			if (event.key.code == sf::Mouse::Left && drawState != 'n')
+			{
+				//Draw start
+				newDraw = true;
+				isDrawing = true;
+				std::cout << "Start" << std::endl;
+			}
+			else if (event.key.code == sf::Mouse::Right)
+			{
+				//Erase start
+				drawState = 'e';
+				isDrawing = true;
+			}
+		}
+		else if (event.type == sf::Event::MouseButtonReleased)
+		{
+			if (event.key.code == sf::Mouse::Left && drawState != 'n')
+			{
+				//Draw end
+				endDraw = true;
+				isDrawing = false;
+				std::cout << "End" << std::endl;
+			}
+			else if (event.type == sf::Mouse::Right)
+			{
+				//Erase end
+				isDrawing = false;
+			}
+		}
+	}
 }
 
-void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, sf::RenderWindow *window)
+void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, std::vector<Vigor*> &activeVigors_, sf::RenderWindow *window)
 {
+	sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 	if (drawState == 'n')
 	{
 		return;
 	}
 	if (isDrawing)
 	{
-		if (drawState == 'e')
+		if (mousePos.y > 502.0f)
 		{
-
-		}
-		else
-		{
-			sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
-			if (newDraw)
+			if (drawState == 'e')
 			{
-				currentStroke_ = new Stroke;
-				currentStrokeIndex = activeActors_.size();
-				activeActors_.push_back(currentStroke_);
-				newDraw = false;
+
 			}
-			sf::CircleShape currentCircle;
-			currentCircle.setPosition(mousePos);
-			currentCircle.setRadius(2.0f);
-			currentStroke_->circles.push_back(currentCircle);
+			else
+			{
+				if (newDraw)
+				{
+					currentStroke_ = new Stroke;
+					currentStrokeIndex = std::find(activeActors_.begin(), activeActors_.end(), currentStroke_) - activeActors_.begin();
+					activeActors_.push_back(currentStroke_);
+					newDraw = false;
+				}
+				sf::CircleShape currentCircle;
+				currentCircle.setPosition(mousePos);
+				currentCircle.setRadius(2.0f);
+				currentStroke_->circles.push_back(currentCircle);
+			}
 		}
+
 	}
 	if (endDraw)
 	{
@@ -136,19 +144,28 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, sf::Render
 			data.push_back(currentStroke_->circles[i].getPosition());
 		}
 		//Clear stroke
-		delete activeActors_[currentStrokeIndex];
-
-		switch (drawState)
+		currentStrokeIndex = std::find(activeActors_.begin(), activeActors_.end(), currentStroke_) - activeActors_.begin();
+		if (currentStrokeIndex < activeActors_.size())
 		{
-		case 'f':
-			activeActors_[currentStrokeIndex] = new Forbiddance(data);
-			break;
-		case 'w':
-			activeActors_[currentStrokeIndex] = new Warding(data);
-			break;
-		case 'v':
-			//activeActors_[currentStrokeIndex] = new Vigor(data);
-			break;
+			delete activeActors_[currentStrokeIndex];
+
+			switch (drawState)
+			{
+			case 'f':
+				activeActors_[currentStrokeIndex] = new Forbiddance(data);
+				break;
+			case 'w':
+				activeActors_[currentStrokeIndex] = new Warding(data);
+				break;
+			case 'v':
+				//activeVigors_.push_back(new Vigor(data));
+				//activeActors_[currentStrokeIndex] = activeVigors_.back();
+				break;
+			}
+		}
+		else
+		{
+			std::cout << "Failed to find Stroke in activeActors_" << std::endl;
 		}
 		
 		endDraw = false;

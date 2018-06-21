@@ -1,5 +1,10 @@
 #include "Panel.h"
 
+Panel::Panel()
+{
+
+}
+
 Panel::Panel(std::string inTexFilePath, sf::Vector2f size, sf::Vector2f position)
 {
 	background.setSize(size);

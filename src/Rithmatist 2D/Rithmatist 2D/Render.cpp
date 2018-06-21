@@ -5,8 +5,9 @@
 Render::Render()
 {
 	window.create(sf::VideoMode(1000, 1000), "Rithmatist 2D", sf::Style::Close | sf::Style::Titlebar);
+	window.setPosition(sf::Vector2i(window.getPosition().x, 0));
 	sf::ContextSettings settings;
-	settings.antialiasingLevel = 4;
+	settings.antialiasingLevel = 2;
 }
 
 void Render::renderCycle(double factor, std::vector<GameActor*> &activeActors_)

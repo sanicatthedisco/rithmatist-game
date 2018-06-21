@@ -72,7 +72,7 @@ void Warding::CircularRegression()
 
 void Warding::CircleFitByTaubin()
 {
-///Modified from http://people.cas.uab.edu/~mosya/cl/CircleFitByTaubin.cpp
+///Modified and added to. From http://people.cas.uab.edu/~mosya/cl/CircleFitByTaubin.cpp
 /*
 Circle fit to a given set of data points (in 2D)
 
