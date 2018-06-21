@@ -3,7 +3,7 @@
 Warding::Warding(std::vector<sf::Vector2f> data)
 {
 	regressionCircle.setOutlineThickness(1.0f);
-	regressionCircle.setFillColor(sf::Color::Black);
+	regressionCircle.setFillColor(sf::Color(0, 0, 0, 0));
 
 	points = data;
 	for (int i = 0; i < points.size(); i++)
@@ -184,9 +184,13 @@ Nikolai Chernov  (September 2012)
 	regressionCircle.setOrigin(regressionCircle.getRadius(), regressionCircle.getRadius());
 	regressionCircle.setPosition(sf::Vector2f(Xcenter + mean(x), Ycenter + mean(y)));
 	//Choose appropiate point count for circle
-	if (regressionCircle.getRadius() > 50.0f)
+	if (regressionCircle.getRadius() > 75.0f)
 	{
 		regressionCircle.setPointCount(std::ceil(regressionCircle.getRadius() / 4.0f));
+	}
+	else if (regressionCircle.getRadius() > 25.0f)
+	{
+		regressionCircle.setPointCount(std::ceil(regressionCircle.getRadius() / 2.0f));
 	}
 
 	//iter;  //  return the number of iterations, too
