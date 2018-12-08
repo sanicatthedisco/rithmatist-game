@@ -20,8 +20,23 @@ void GameActor::Kill(std::vector<GameActor*> activeActors_)
 	}
 }
 
+bool GameActor::checkIntersect(float x0, float y0, float x1, float y1)
+{
+	return false;
+}
+
 void GameActor::draw(sf::RenderTarget& target)
 {
+}
+
+void GameActor::erase(float x, float y)
+{
+	return;
+}
+
+void GameActor::pack(sf::Packet& packet)
+{
+	return;
 }
 
 

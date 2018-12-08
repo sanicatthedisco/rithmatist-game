@@ -2,11 +2,15 @@
 
 Panel::Panel()
 {
-
+	strength = 1000.0f;
 }
 
 Panel::Panel(std::string inTexFilePath, sf::Vector2f size, sf::Vector2f position)
 {
+	type = 'p';
+	send = false;
+	strength = 1000.0f;
+
 	background.setSize(size);
 	backTex.loadFromFile(inTexFilePath);
 	background.setTexture(&backTex);
@@ -29,6 +33,7 @@ void Panel::update(InputHandler handler)
 {
 	if (handler.drawState != lastDrawState)
 	{
+		//std::cout << "Hey" << std::endl;
 		switch(handler.drawState)
 		{
 		case 'n':

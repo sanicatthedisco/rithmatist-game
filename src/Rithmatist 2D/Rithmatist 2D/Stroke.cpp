@@ -2,7 +2,9 @@
 
 Stroke::Stroke()
 {
-	
+	type = 's';
+	send = false;
+	strength = 1000.0f;
 }
 
 

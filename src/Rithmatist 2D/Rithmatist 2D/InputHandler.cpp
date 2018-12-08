@@ -82,11 +82,11 @@ void InputHandler::handleInput(sf::Event &event, sf::RenderWindow *window)
 			{
 				//Erase start
 				drawState = 'e';
-				isDrawing = true;
 			}
 		}
 		else if (event.type == sf::Event::MouseButtonReleased)
 		{
+			//std::cout << "SIRRR" << std::endl;
 			if (event.key.code == sf::Mouse::Left && drawState != 'n')
 			{
 				//Draw end
@@ -94,10 +94,11 @@ void InputHandler::handleInput(sf::Event &event, sf::RenderWindow *window)
 				isDrawing = false;
 				std::cout << "End" << std::endl;
 			}
-			else if (event.type == sf::Mouse::Right)
+			else if (event.key.code == sf::Mouse::Right)
 			{
 				//Erase end
-				isDrawing = false;
+				drawState = 'n';
+				std::cout << "Erase end and state is " << drawState << std::endl;
 			}
 		}
 	}
@@ -110,28 +111,30 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, std::vecto
 	{
 		return;
 	}
+	else if (drawState == 'e')
+	{
+		// Erase
+		for (int i = 0; i < activeActors_.size(); i++)
+		{
+			activeActors_[i]->erase(mousePos.x, mousePos.y);
+		}
+		return;
+	}
 	if (isDrawing)
 	{
 		if (mousePos.y > 502.0f)
 		{
-			if (drawState == 'e')
+			if (newDraw)
 			{
-
+				currentStroke_ = new Stroke;
+				currentStrokeIndex = std::find(activeActors_.begin(), activeActors_.end(), currentStroke_) - activeActors_.begin();
+				activeActors_.push_back(currentStroke_);
+				newDraw = false;
 			}
-			else
-			{
-				if (newDraw)
-				{
-					currentStroke_ = new Stroke;
-					currentStrokeIndex = std::find(activeActors_.begin(), activeActors_.end(), currentStroke_) - activeActors_.begin();
-					activeActors_.push_back(currentStroke_);
-					newDraw = false;
-				}
-				sf::CircleShape currentCircle;
-				currentCircle.setPosition(mousePos);
-				currentCircle.setRadius(2.0f);
-				currentStroke_->circles.push_back(currentCircle);
-			}
+			sf::CircleShape currentCircle;
+			currentCircle.setPosition(mousePos);
+			currentCircle.setRadius(2.0f);
+			currentStroke_->circles.push_back(currentCircle);
 		}
 
 	}
@@ -158,10 +161,12 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, std::vecto
 				activeActors_[currentStrokeIndex] = new Warding(data);
 				break;
 			case 'v':
-				//activeVigors_.push_back(new Vigor(data));
-				//activeActors_[currentStrokeIndex] = activeVigors_.back();
+				activeVigors_.push_back(new Vigor(data));
+				activeActors_[currentStrokeIndex] = activeVigors_.back();
 				break;
 			}
+
+			activeActors_[currentStrokeIndex]->send = true;
 		}
 		else
 		{

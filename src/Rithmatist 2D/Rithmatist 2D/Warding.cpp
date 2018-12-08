@@ -2,6 +2,9 @@
 
 Warding::Warding(std::vector<sf::Vector2f> data)
 {
+	send = false;
+	type = 'w';
+
 	regressionCircle.setOutlineThickness(1.0f);
 	regressionCircle.setFillColor(sf::Color(0, 0, 0, 0));
 
@@ -12,10 +15,26 @@ Warding::Warding(std::vector<sf::Vector2f> data)
 		y.push_back(points[i].y);
 	}
 
-	//CircularRegression();
-	CircleFitByTaubin();
+	// Get distance between first and last point to make sure its a circle
+	if (std::hypot(x.back() - x[0], y.back() - y[0]) < 30.0f)
+	{
+		//CircularRegression();
+		if (CircleFitByTaubin())
+		{
+			//std::cout << "Strength: " << strength << std::endl;
+		}
+		else
+		{
+			strength = 0.0f;
+			std::cout << "Failed to create Warding (Regression fail).";
+		}
+	}
+	else
+	{
+		strength = 0.0f;
+		std::cout << "Failed to create Warding (Circle not closed enough)." << std::endl;
+	}
 
-	std::cout << "Strength: " << strength << std::endl;
 }
 
 Warding::~Warding()
@@ -24,7 +43,37 @@ Warding::~Warding()
 
 void Warding::draw(sf::RenderTarget& target)
 {
+	// Update transparency based on strength
+	int alpha = 255 * strength / 180.0f;
+	if (alpha < 20)
+	{
+		alpha = 20;
+	}
+	regressionCircle.setOutlineColor(sf::Color(255, 255, 255, alpha));
 	target.draw(regressionCircle);
+}
+
+void Warding::pack(sf::Packet& packet)
+{
+	std::cout << "Pack Warding\n";
+	packet << type;
+	sf::Uint16 pointCount = x.size();
+	packet << pointCount;
+
+	for (int i = 0; i < x.size(); i++)
+	{
+		packet << x[i] << 1000.0f - y[i];
+	}
+}
+
+bool Warding::checkIntersect(float x0, float y0, float x1, float y1)
+{
+	if (hypotf(regressionCircle.getPosition().x - x1, regressionCircle.getPosition().y - y1) <= regressionCircle.getRadius())
+	{
+		//If point lies in/on circle
+		return true;
+	}
+	return false;
 }
 
 float Warding::mean(std::vector<float> values)
@@ -38,8 +87,9 @@ float Warding::mean(std::vector<float> values)
 	return sum / values.size();
 }
 
-void Warding::CircularRegression()
+bool Warding::CircularRegression()
 {
+
 	// Find center and distance and evaluate circle, return strength of ward line
 	// Find center as centroid of points
 	float cX = mean(x);
@@ -59,18 +109,14 @@ void Warding::CircularRegression()
 	avgDist = avgDist / x.size();
 	strength = 100.0f*(maxRadius - minRadius) / maxRadius; // Ratio keeps it uniform over all size circles		
 
-	// Get distance between first and last point to make sure its a circle
-	if (std::hypot(x.back() - x[0], y.back() - y[0]) > 50.0f)
-	{
-		//Fail to draw
-	}
-
 	regressionCircle.setRadius(avgDist - 1.0f);
 	regressionCircle.setPosition(sf::Vector2f(cX, cY));
+
+	return true;
 	
 }
 
-void Warding::CircleFitByTaubin()
+bool Warding::CircleFitByTaubin()
 {
 ///Modified and added to. From http://people.cas.uab.edu/~mosya/cl/CircleFitByTaubin.cpp
 /*
@@ -119,6 +165,29 @@ It provides a very good initial guess for a subsequent geometric fit.
 Nikolai Chernov  (September 2012)
 
 */
+///RMSD Evaluation Method
+//RMSD = RMSD(data, circle); 
+
+/// Strength should be based on the maximum and mininum radii of the shape that was drawn.
+	float avgDist = 0;
+	float minRadius = std::numeric_limits<float>::max();
+	float maxRadius = 0;
+	float tempDist;
+	for (int i = 0; i < points.size(); i++) {
+		tempDist = std::hypot(mean(x) - x[i], mean(y) - y[i]);
+		avgDist += tempDist;
+		if (tempDist < minRadius) minRadius = tempDist;
+		if (tempDist > maxRadius) maxRadius = tempDist;
+	}
+	avgDist = avgDist / x.size();
+	strength = 180.0f*(maxRadius - minRadius) / maxRadius; // Ratio keeps it uniform over all size circles
+	// Invalid circle if regression sucks or too small
+	if (strength < 50.0f || maxRadius < 30.0f)
+	{
+		return false;
+	}
+
+
 	int i, iter, IterMAX = 99;
 
 	float Xi, Yi, Zi;
@@ -180,7 +249,12 @@ Nikolai Chernov  (September 2012)
 	Ycenter = (Myz*(Mxx - X) - Mxz * Mxy) / DET / 2.0f;
 
 	//       assembling the output
-	regressionCircle.setRadius(std::sqrt(Xcenter*Xcenter + Ycenter * Ycenter + Mz) - 1.0f);
+	float finRadius = std::sqrt(Xcenter*Xcenter + Ycenter * Ycenter + Mz) - 1.0f;
+	if (finRadius < 10.0f || finRadius > 200.0f)
+	{
+		return false;
+	}
+	regressionCircle.setRadius(finRadius);
 	regressionCircle.setOrigin(regressionCircle.getRadius(), regressionCircle.getRadius());
 	regressionCircle.setPosition(sf::Vector2f(Xcenter + mean(x), Ycenter + mean(y)));
 	//Choose appropiate point count for circle
@@ -195,22 +269,15 @@ Nikolai Chernov  (September 2012)
 
 	//iter;  //  return the number of iterations, too
 
-	///RMSD Evaluation Method
-	//RMSD = RMSD(data, circle); 
+	return true;
+}
 
-	/// Strength should be based on the maximum and mininum radii of the shape that was drawn.
-	float avgDist = 0;
-	float minRadius = std::numeric_limits<float>::max();
-	float maxRadius = 0;
-	float tempDist;
-	for (int i = 0; i < points.size(); i++) {
-		tempDist = std::hypot(mean(x) - x[i], mean(y) - y[i]);
-		avgDist += tempDist;
-		if (tempDist < minRadius) minRadius = tempDist;
-		if (tempDist > maxRadius) maxRadius = tempDist;
+void Warding::erase(float x, float y)
+{
+	//Kill if erase click is within 5 px of circle boundary
+	float dist = hypotf(x - regressionCircle.getPosition().x, y - regressionCircle.getPosition().y);
+	if (dist < regressionCircle.getRadius() + 5.0f && dist > regressionCircle.getRadius() - 5.0f)
+	{
+		strength = 0.0f;
 	}
-	avgDist = avgDist / x.size();
-	strength = 180.0f*(maxRadius - minRadius) / maxRadius; // Ratio keeps it uniform over all size circles
-
-
 }

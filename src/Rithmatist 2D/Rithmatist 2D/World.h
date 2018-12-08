@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/System.hpp>
+#include <SFML/Network.hpp>
+#include <iostream>
 #include <vector>
 #include <string>
 #include "Main.h"
@@ -15,6 +17,24 @@ public:
 
 	sf::Clock gameClock;
 private:
+	std::vector<sf::Vector2f> extractPoints(sf::Packet& packet);
+	//friend sf::Packet& operator<<(sf::Packet& packet, Forbiddance& forbiddance)
+	//{
+	//	std::cout << "Pack Forbid\n";
+	//	packet << forbiddance.type;
+	//	sf::Uint16 pointCount = forbiddance.x.size();
+	//	packet << pointCount;
+
+	//	for (int i = 0; i < forbiddance.x.size(); i++)
+	//	{
+	//		packet << forbiddance.x[i] << forbiddance.y[i];
+	//	}
+
+	//	return packet;
+	//}
+
+
+
 	bool gameCycling = true;
 	double previous = gameClock.getElapsedTime().asMilliseconds();
 	double lag = 0.0;
