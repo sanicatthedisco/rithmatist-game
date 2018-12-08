@@ -2,6 +2,7 @@
 
 InputHandler::InputHandler()
 {
+	chalk = 40;
 	drawState = 'n';
 	//f=forbiddence, w=warding, v=vigor, e=erase, n=none
 	isDrawing = false;
@@ -136,6 +137,12 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, std::vecto
 			currentCircle.setRadius(2.0f);
 			currentStroke_->circles.push_back(currentCircle);
 		}
+		else
+		{
+			endDraw = true;
+			isDrawing = false;
+			std::cout << "End" << std::endl;
+		}
 
 	}
 	if (endDraw)
@@ -150,23 +157,27 @@ void InputHandler::handleDraw(std::vector<GameActor*> &activeActors_, std::vecto
 		currentStrokeIndex = std::find(activeActors_.begin(), activeActors_.end(), currentStroke_) - activeActors_.begin();
 		if (currentStrokeIndex < activeActors_.size())
 		{
-			delete activeActors_[currentStrokeIndex];
-
-			switch (drawState)
+			if (chalk > 0)
 			{
-			case 'f':
-				activeActors_[currentStrokeIndex] = new Forbiddance(data);
-				break;
-			case 'w':
-				activeActors_[currentStrokeIndex] = new Warding(data);
-				break;
-			case 'v':
-				activeVigors_.push_back(new Vigor(data));
-				activeActors_[currentStrokeIndex] = activeVigors_.back();
-				break;
-			}
+				delete activeActors_[currentStrokeIndex];
 
-			activeActors_[currentStrokeIndex]->send = true;
+				switch (drawState)
+				{
+				case 'f':
+					activeActors_[currentStrokeIndex] = new Forbiddance(data);
+					break;
+				case 'w':
+					activeActors_[currentStrokeIndex] = new Warding(data);
+					break;
+				case 'v':
+					activeVigors_.push_back(new Vigor(data));
+					activeActors_[currentStrokeIndex] = activeVigors_.back();
+					break;
+				}
+
+				activeActors_[currentStrokeIndex]->send = true;
+				chalk--;
+			}
 		}
 		else
 		{

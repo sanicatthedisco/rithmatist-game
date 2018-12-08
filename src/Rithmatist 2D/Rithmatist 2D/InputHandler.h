@@ -23,6 +23,7 @@ private:
 	bool isDrawing;
 	bool newDraw;
 	bool endDraw;
+	int chalk;
 	size_t  currentStrokeIndex;
 	Stroke *currentStroke_;
 	sf::Vector2f lastMousePos;

@@ -1,14 +1,7 @@
-﻿  Forbiddance.cpp
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\forbiddance.cpp(60): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\forbiddance.cpp(80): warning C4267: 'initializing': conversion from 'size_t' to 'sf::Uint16', possible loss of data
-  Vigor.cpp
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\vigor.cpp(63): warning C4267: 'initializing': conversion from 'size_t' to 'sf::Uint16', possible loss of data
-  Warding.cpp
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(47): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(60): warning C4267: 'initializing': conversion from 'size_t' to 'sf::Uint16', possible loss of data
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(263): warning C4244: 'argument': conversion from 'float' to 'size_t', possible loss of data
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(267): warning C4244: 'argument': conversion from 'float' to 'size_t', possible loss of data
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(193): warning C4101: 'Xi': unreferenced local variable
-c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\warding.cpp(193): warning C4101: 'Yi': unreferenced local variable
+﻿  InputHandler.cpp
+  Panel.cpp
+  World.cpp
+c:\users\jeffr\documents\github\rithmatist-game\src\rithmatist 2d\rithmatist 2d\world.cpp(89): warning C4101: 'recieveCount': unreferenced local variable
+  main.cpp
   Generating Code...
   Rithmatist 2D.vcxproj -> C:\Users\jeffr\Documents\GitHub\rithmatist-game\src\Rithmatist 2D\x64\Debug\Rithmatist 2D.exe
